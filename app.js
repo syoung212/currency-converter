@@ -8,15 +8,27 @@ let userName;
 //ms = 2000 miliseconds, after 2 seconds, the promise will resolve
 const resolveAnimations = (ms = 2000) => new Promise((resolve) => setTimeout(resolve, ms));
 
+async function typewriterEffect(text, delay = 100) {
+  for (const char of text) {
+    await new Promise(resolve => setTimeout(resolve, delay));
+    process.stdout.write(char);
+  }
+}
+
 async function startGame() {
   //welcome msg
-  const welcomeMsg = chalkAnimation.glitch(`Enter your currency amount `);
-  //call helper
+  // const welcomeMsg = chalkAnimation.glitch(`Enter your currency amount `);
+  // //call helper
 
+  // await resolveAnimations();
+  // //stop the animation
+  // welcomeMsg.stop();
 
-  await resolveAnimations();
-  //stop the animation
-  welcomeMsg.stop();
+  const welcomeType = `Welcome. This is a CLI financial profit manager. \n`
+  await typewriterEffect(welcomeType);
+  const purposeType = `You can exchange foreign currencies, get real-time stock prices of indexes, and determine whether you will be at a profit or not`
+  await typewriterEffect(purposeType);
+
 
   //about the game
   // console.log(`
