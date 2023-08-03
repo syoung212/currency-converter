@@ -1,3 +1,4 @@
+const chalk = require('chalk');
 const inquirer = require("inquirer");
 const axios = require("axios");
 const yahooStockAPI = require('yahoo-stock-api').default;
@@ -27,7 +28,7 @@ async function startGame() {
   // await resolveAnimations();
   // //stop the animation
   // welcomeMsg.stop();
-
+  console.log(chalk.blue('Hello world!'));
   const welcomeType = `Welcome. This is a CLI financial profit manager. \n`
   await typewriterEffect(welcomeType);
   const purposeType = `You can exchange foreign currencies, get real-time stock prices of indexes, and determine whether you will be at a profit or not. \n`
