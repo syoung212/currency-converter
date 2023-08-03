@@ -1,8 +1,8 @@
-import chalk from "chalk";
-import inquirer from "inquirer";
-import chalkAnimation from "chalk-animation";
-import axios from "axios";
+const inquirer = require("inquirer");
+const axios = require("axios");
+const yahooStockAPI = require('yahoo-stock-api').default;
 
+const yahoo = new yahooStockAPI();
 // extension: profit tracker 
 let userName;
 let userCmd;
@@ -63,6 +63,9 @@ async function commandCenter() {
       if (userCmd == 'exchange') {
         exchange();
       }
+      if (userCmd == 'stock') {
+        stock();
+      }
     } else {
       typewriterEffect(`This is not a valid input. Please try again. \n`);
     }
@@ -75,7 +78,6 @@ async function exchange() {
   let ending;
   let value;
 
-  let valid = false;
   let start_curr = await inquirer.prompt({
     name: 'starting',
     type: 'input',
@@ -109,6 +111,26 @@ async function convertForeignCurr(start, end, value) {
     exchange();
   }
 
+}
+
+async function stock() {
+  let index;
+  let index_curr = await inquirer.prompt({
+    name: 'index',
+    type: 'input',
+    message: `Which stock do you want to trade?\n`
+  });
+  index = index_curr.index;
+  await stock_exchange(index)
+
+}
+
+async function stock_exchange(index) {
+  try {
+    yahoo.getSymbol({ symbol: 'AAPL' }).then(console.log);
+  } catch (error) {
+    console.log(error)
+  }
 }
 async function main() {
   //invoke our game functions here
