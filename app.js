@@ -10,7 +10,7 @@ let userName;
 let userCmd;
 let defaultCurr;
 
-let wallet = 0; // will be in the currency that you start with
+let portfolio = []; // will be in the currency that you start with
 
 //helper to resolve animations
 //ms = 2000 miliseconds, after 2 seconds, the promise will resolve
@@ -33,9 +33,9 @@ async function startGame() {
   // welcomeMsg.stop();
   const welcomeType = `Welcome. This is a CLI financial profit manager. \n\n`
   await typewriterEffect(chalk.bold(welcomeType));
-  const purposeType = `You can exchange foreign currencies, get real-time stock prices of indexes, and determine whether you will be at a profit or not. \n\n`
+  const purposeType = `You can exchange foreign currencies, get real-time stock prices of indexes, determine whether you will be at a profit or not, and we can recommend you some stocks.\n\n`
   await typewriterEffect(chalk.bold(purposeType));
-  const commands = `If you want to exchange currency, type 'exchange'. \nIf you want to see the current stock prices, type 'stock'.\nIf you want to see profits, type 'profits'.\nIf you want to exit, select 'quit'\n\n`
+  const commands = `If you want to exchange currency, type 'exchange'. \nIf you want to see the current stock prices, type 'stock'.\nIf you want to see profits, type 'profits'.\nIf you want us to recommend stocks, select 'quit'\n\n`
   await typewriterEffect(commands);
   const transition = `To start, please provide us some information about you, so that we can get started\n\n`;
   await typewriterEffect(transition);
@@ -176,7 +176,7 @@ async function profit() {
   let buy_query = await inquirer.prompt({
     name: 'bought',
     type: 'input',
-    message: `What did you buy EACH ${index} for? Please note that we are using the default currency as the price you bought it for.\n`
+    message: `What did you buy EACH of these shares for? Please note that we are using the default currency as the price you bought it for.\n`
   });
   buy_price = buy_query.bought;
 
@@ -213,9 +213,20 @@ async function profit() {
     await typewriterEffect(`The value is the same.\n\n`)
   }
 
+  // let question = await inquirer.prompt({
+  //   name: 'answer',
+  //   type: 'input',
+  //   message: `Would you like us to save this symbol to your portfolio? Please say yes or no.`
+  // });
+
+  // if (question.answer == 'yes') {
+  //   portfolio.push();
+  // }
+
   await commandCenter()
 
 }
+
 async function main() {
   //invoke our game functions here
   await startGame();
