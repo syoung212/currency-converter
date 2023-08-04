@@ -2,7 +2,7 @@ const chalk = require('chalk');
 const inquirer = require("inquirer");
 const axios = require("axios");
 const yahooStockAPI = require('yahoo-stock-api').default;
-const yahooFinance = require('yahoo-finance2').default;
+//const yahooFinance = require('yahoo-finance2').default;
 
 const yahoo = new yahooStockAPI();
 // extension: profit tracker 
@@ -31,11 +31,11 @@ async function startGame() {
   // await resolveAnimations();
   // //stop the animation
   // welcomeMsg.stop();
-  const welcomeType = `Welcome. This is a CLI financial profit manager. \n\n`
+  const welcomeType = `Welcome. This is Nancy, your CLI Stock Assistant. \n\n`
   await typewriterEffect(chalk.bold(welcomeType));
   const purposeType = `You can exchange foreign currencies, get real-time stock prices of indexes, determine whether you will be at a profit or not, and we can recommend you some stocks.\n\n`
   await typewriterEffect(chalk.bold(purposeType));
-  const commands = `If you want to exchange currency, type 'exchange'. \nIf you want to see the current stock prices, type 'stock'.\nIf you want to see profits, type 'profits'.\nIf you want us to recommend stocks, select 'quit'\n\n`
+  const commands = `If you want to exchange currency, type 'exchange'. \nIf you want to see the current stock prices, type 'stock'.\nIf you want to see profits, type 'profits'.\nIf you want us to recommend stocks, select 'quit'.\n\n`
   await typewriterEffect(commands);
   const transition = `To start, please provide us some information about you, so that we can get started\n\n`;
   await typewriterEffect(transition);
@@ -59,13 +59,12 @@ async function userProfile() {
 };
 
 async function commandCenter() {
-  // TO DO: CONVERT USER CMD TO LOWERCASE
   let valid = false;
   while (valid == false) {
     let function_answer = await inquirer.prompt({
       name: 'functional_name',
       type: 'input',
-      message: `Enter any of the following commands: exchange, stock, profits, quit\n`
+      message: `Enter any of the following commands: exchange, stock, profits, quit.\n`
     });
     userCmd = function_answer.functional_name.toLowerCase();
     if (userCmd == 'exchange' || userCmd == 'stock' || userCmd == 'profits' || userCmd == 'quit') {
@@ -78,6 +77,9 @@ async function commandCenter() {
       }
       if (userCmd == 'profits') {
         await profit();
+      }
+      if (userCmd == 'quit') {
+        await quit();
       }
     } else {
       await typewriterEffect(`This is not a valid input. Please try again. \n`);
@@ -225,6 +227,10 @@ async function profit() {
 
   await commandCenter()
 
+}
+
+async function quit() {
+  console.log(chalk.bold(chalk.green(`Thank you for using this CLI Stock Assistant.`)));
 }
 
 async function main() {
