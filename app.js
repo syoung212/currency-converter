@@ -31,13 +31,13 @@ async function startGame() {
   // await resolveAnimations();
   // //stop the animation
   // welcomeMsg.stop();
-  const welcomeType = `Welcome. This is a CLI financial profit manager. \n`
-  await typewriterEffect(welcomeType);
-  const purposeType = `You can exchange foreign currencies, get real-time stock prices of indexes, and determine whether you will be at a profit or not. \n`
-  await typewriterEffect(purposeType);
-  const commands = `If you want to exchange currency, type 'exchange'. \nIf you want to see the current stock prices, type 'stock'.\nIf you want to see profits, type 'profits'.\nIf you want to exit, select 'quit'\n`
+  const welcomeType = `Welcome. This is a CLI financial profit manager. \n\n`
+  await typewriterEffect(chalk.bold(welcomeType));
+  const purposeType = `You can exchange foreign currencies, get real-time stock prices of indexes, and determine whether you will be at a profit or not. \n\n`
+  await typewriterEffect(chalk.bold(purposeType));
+  const commands = `If you want to exchange currency, type 'exchange'. \nIf you want to see the current stock prices, type 'stock'.\nIf you want to see profits, type 'profits'.\nIf you want to exit, select 'quit'\n\n`
   await typewriterEffect(commands);
-  const transition = `To start, please provide us some information about you, so that we can get started\n`;
+  const transition = `To start, please provide us some information about you, so that we can get started\n\n`;
   await typewriterEffect(transition);
 
 };
@@ -71,16 +71,16 @@ async function commandCenter() {
     if (userCmd == 'exchange' || userCmd == 'stock' || userCmd == 'profits' || userCmd == 'quit') {
       valid = true;
       if (userCmd == 'exchange') {
-        exchange();
+        await exchange();
       }
       if (userCmd == 'stock') {
-        stock();
+        await stock();
       }
       if (userCmd == 'profits') {
-        profit();
+        await profit();
       }
     } else {
-      typewriterEffect(`This is not a valid input. Please try again. \n`);
+      await typewriterEffect(`This is not a valid input. Please try again. \n`);
     }
   }
 }
@@ -114,9 +114,9 @@ async function exchange() {
   newValue = await convertForeignCurr(starting, ending, value);
   if (newValue != null) {
     await typewriterEffect(`${value} ${starting} will give you ${newValue[0]} ${newValue[1]} \n`);
-    commandCenter();
+    await commandCenter();
   } else {
-    exchange();
+    await exchange();
   }
 }
 
@@ -128,7 +128,7 @@ async function convertForeignCurr(start, end, value) {
     // returns the final value, and the currency 
     return [response.data.rates[end], end]
   } catch (error) {
-    await typewriterEffect(`There is an error with one of your inputs. Please try again.\n`);
+    await typewriterEffect(chalk.red(`There is an error with one of your inputs. Please try again.\n`));
     return null;
   }
 
@@ -146,7 +146,7 @@ async function stock() {
   if (value != null) {
     await typewriterEffect(`The value of ${value[0]}'s stock today is ${value[1]} ${value[2]}.\n`);
   }
-  commandCenter();
+  await commandCenter();
 
 }
 
@@ -155,10 +155,10 @@ async function stock_exchange(index) {
     const api_response = await yahoo.getSymbol({ symbol: index })
     // Based on previous close
     // returns [the name of the stock exchange, previous close value, currency]
-    console.log(`Stock Exchange Response: ${[api_response.name, api_response.response.previousClose, api_response.currency]}`)
+    // console.log(`Stock Exchange Response: ${[api_response.name, api_response.response.previousClose, api_response.currency]}`)
     return [api_response.name, api_response.response.previousClose, api_response.currency];
   } catch (error) {
-    await typewriterEffect(`There may be a typo in the symbol. Please try again.\n`);
+    await typewriterEffect(chalk.red(`There may be a typo in the symbol. Please try again.\n`));
     return null;
   }
 }
@@ -189,8 +189,12 @@ async function profit() {
   shares = shares_query.share;
 
   let current_output = await stock_exchange(index);
+  if (current_output == null) {
+    await commandCenter();
+  }
+  console.log(`Stock Exchange Response: ${current_output}`);
+
   let current_value;
-  console.log(`This is the current output currency ${current_output[2]}. This is defaultCurr ${defaultCurr}`)
   if (current_output[2] != defaultCurr) {
     let conversion = await convertForeignCurr(defaultCurr, current_output[2], current_output[1]);
     current_value = parseInt(conversion[0]);
@@ -202,12 +206,14 @@ async function profit() {
   let profit = (current_value * shares) - (buy_price * shares);
   let percentChange = Math.abs((profit / (buy_price * shares)) * 100).toFixed(1);
   if (profit < 0) {
-    await typewriterEffect(`You would be at a loss, since the current value is ${current_value} ${defaultCurr}. This is a ${percentChange}% loss.`);
+    await typewriterEffect(chalk.bold(chalk.red(`You would be at a loss, since the current value for each share is ${current_value} ${defaultCurr}. This is a ${percentChange}% loss.\n\n`)));
   } else if (profit > 0) {
-    await typewriterEffect(`You would be at a gain, since the current value is ${current_value} ${defaultCurr}. This is a ${percentChange}% gain.`);
+    await typewriterEffect(chalk.bold(chalk.green(`You would be at a gain, since the current value for each share is ${current_value} ${defaultCurr}. This is a ${percentChange}% gain.\n\n`)));
   } else {
-    await typewriterEffect(`The value is the same.`)
+    await typewriterEffect(`The value is the same.\n\n`)
   }
+
+  await commandCenter()
 
 }
 async function main() {
