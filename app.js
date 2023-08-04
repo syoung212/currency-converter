@@ -33,7 +33,7 @@ async function startGame() {
   // welcomeMsg.stop();
   const welcomeType = `Welcome. This is Nancy, your CLI Stock Assistant. \n\n`
   await typewriterEffect(chalk.bold(welcomeType));
-  const purposeType = `You can exchange foreign currencies, get real-time stock prices of indexes, determine whether you will be at a profit or not, and we can recommend you some stocks.\n\n`
+  const purposeType = `You can exchange foreign currencies, get real-time stock prices of indexes, determine whether you will be at a profit or not.\n\n`
   await typewriterEffect(chalk.bold(purposeType));
   const commands = `If you want to exchange currency, type 'exchange'. \nIf you want to see the current stock prices, type 'stock'.\nIf you want to see profits, type 'profits'.\nIf you want us to recommend stocks, select 'quit'.\n\n`
   await typewriterEffect(commands);
