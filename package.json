@@ -4,6 +4,7 @@
     "chalk": "^4.1.2",
     "chalk-animation": "^2.0.3",
     "inquirer": "^8.2.6",
+    "yahoo-finance2": "^2.4.3",
     "yahoo-stock-api": "^2.1.3"
   }
 }
